@@ -66,7 +66,7 @@ ToDo :
     
 //Set initial state
     function MinnieBank(){
-        log0("deploy bank");
+        // log0("deploy bank");
         trustedAddresses.push(owner); //Owner is a trusted address
     }
 

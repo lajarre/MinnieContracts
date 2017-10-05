@@ -10,16 +10,16 @@ contract MinnieGovernance is owned {
     
     mapping(bytes32 => GovernanceProxy) public proxies;
     ProposalValidator public proposalValidator;
-    
+
     // [XXX] - Shounldn't it be onlyowner?
     function setProxyFor(string identifier, address target) onlyowner returns(GovernanceProxy) {
-        bytes32 h=identifierHash(identifier);
+        bytes32 h = identifierHash(identifier);
         // [XXX] - Why create a new GProxy contract and not change the existing proxy's target?
         // Because nobody owns the proxy, probably?
         // Then, shouldn't we somehow "delete" the old proxy?
-        GovernanceProxy proxy=new GovernanceProxy(target);
+        GovernanceProxy proxy = new GovernanceProxy(target);
         owned(target).changeOwner(address(proxy));
-        return proxies[h]=proxy;
+        return proxies[h] = proxy;
     }
     
     function identifierHash(string identifier) constant returns(bytes32) {
@@ -33,17 +33,38 @@ contract MinnieGovernance is owned {
     }
     
     function MinnieGovernance() {
-        log0("Initializing Governance ...");
-        log0(bytes32(address(this)));
-        
-        proposalValidator = new ProposalValidator(this,msg.sender);
-        //proposalValidator = ProposalValidator(0x06b179aabf198ced0f98c8ceca905a920a137ef4);
-        GovernanceProxy proxy=new GovernanceProxy(this);
-        proxies[identifierHash("governance")]=proxy;
-        owner=address(proxy);
-        
-        MinnieBank bank=new MinnieBank();
+        // log0("Initializing Governance ...");
+        // log0(bytes32(address(this)));
+    }
+
+    /**
+     * Create and set the related ProposalValidator
+     * Note: requires the GovernanceProxy not to be set yet.
+     */
+    function createProposalValidator(uint quorum) onlyowner {
+        proposalValidator = new ProposalValidator(this, msg.sender, quorum);
+    }
+
+    /**
+     * Create and set the proxy for the the related MinnieBank
+     * Note: requires the GovernanceProxy not to be set yet.
+     */
+    function createMinnieBank() onlyowner {
+        MinnieBank bank = new MinnieBank();
         setProxyFor("bank", address(bank));
+    }
+
+    /**
+     * Create and set the proxy for the related GovernanceProxy
+     * Note: this needs to be fired only after the MinnieBank & the
+     * ProposalValidator have been created.
+     */
+    function createGovernanceProxy() onlyowner {
+        // [TODO] - throw if the MinnieBank proxy hasn't been set or if the
+        // proposalValidator attribute has not been set.
+        GovernanceProxy proxy = new GovernanceProxy(this);
+        proxies[identifierHash("governance")] = proxy;
+        owner = address(proxy);
     }
     
     function executeProposal(Proposal proposal) {

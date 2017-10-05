@@ -132,8 +132,8 @@ ToDo :
 
 // Owner address can change rewards
     function changeRewardForScore(uint score, uint reward) onlyowner {
-        log0("Called changeRewardForScore");
-        log1(bytes32(score),bytes32(reward));
+        //log0("Called changeRewardForScore");
+        //log1(bytes32(score),bytes32(reward));
         RewardScoreChanged(score,rewardForScore[score],reward);
         rewardForScore[score]=reward;
     }

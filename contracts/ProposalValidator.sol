@@ -18,10 +18,14 @@ contract ProposalValidator {
         mapping(address=>bool) votes;
     }
     
-    function ProposalValidator(MinnieGovernance g, address first_voter) {
+    function ProposalValidator(MinnieGovernance g, address first_voter, uint q) {
         governance=g;
         voters.push(first_voter);
-        quorum=1;
+        // [XXX] - Changed to a variable value to ease tests (=> insert 0 for
+        // running some test proposal) => this is maybe not so necessary because
+        // the creator is already a voter, and setting the quorum to 0 won't
+        // help doing tests easier than to just vote with the creator.
+        quorum=q;
     }
     
     function isExecutableProposal(address proposal) returns(bool){

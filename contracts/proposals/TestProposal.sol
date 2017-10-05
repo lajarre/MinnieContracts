@@ -16,9 +16,7 @@ contract TestProposal is Proposal{
         GovernanceProxy proxy=governance.proxyFor("bank");
         MinnieBank realBank=MinnieBank(proxy.target());
         MinnieBank proxyBank=MinnieBank(address(proxy));
-        log0(bytes32(realBank.test_value()));
         proxyBank.registerContributor(address(1));
-        log0(bytes32(realBank.test_value()));
     }
     
 }
