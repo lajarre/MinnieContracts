@@ -40,3 +40,5 @@ Migration steps:
 ### [TODO] - Enhance the quorum calculation in the ProposalValidator
 
 Use proportion.
+
+### [TODO] - Make MinnieBank ERC20 compliant

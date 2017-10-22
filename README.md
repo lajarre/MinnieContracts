@@ -82,3 +82,17 @@ It aims at allowing members of the community to periodically (default: each week
 - 3: a more significant amount of work, either several small tasks or a bigger one.
 
 In response to this, the contract will reward the contributor by triggering a payout from the MinnieBank to the contributor, in pre-defined amounts depending on how much work was contributed. Note: these payouts are done in *newly generated tokens*, which increase the total supply of the MinnieBank.
+
+
+# Deploy
+
+Scenario to deploy and execute `TestProposal` from scratch:
+
+- Create `MinnieGoverance`
+- Launch `createProposalValidator`
+- Launch `createMinnieBank`
+- Launch `createGovernanceProxy` 
+- Create `TestProposal`
+- Instanciate `ProposalValidator`
+- Launch `ProposalValidator.vote(test proposal addr, true)`
+- Launch `MinnieGovernance.executeProposal(test proposal addr)`
